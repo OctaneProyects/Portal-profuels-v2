@@ -28,11 +28,11 @@ export const NormalTable = ({ data, docsCol, title, pdf, onclick }) => {
     };
 
 
-    const DownloadFile = async (Opc, IdFact) => {
+    const DownloadFile = async (Opc, IdFact, IdCia) => {
 
         try {
             setLoading(true);
-            const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc });
+            const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc, IdCia:IdCia});
             console.log(data);
 
             if (data && data.success) {
@@ -68,6 +68,9 @@ export const NormalTable = ({ data, docsCol, title, pdf, onclick }) => {
             return {
                 name: key,
                 label: replaceAll(key, '_', ' '),
+                options: (key == "IdCia"? {
+                    display: false,
+                }:null),
             }
         });
 
@@ -81,13 +84,13 @@ export const NormalTable = ({ data, docsCol, title, pdf, onclick }) => {
                         customBodyRender: (value, tableMeta, updateValue) => (
                             <>
                                 <IconButton id={tableMeta.rowData[0]} aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
-                                    DownloadFile(0, tableMeta.rowData[0]);
+                                    DownloadFile(0, tableMeta.rowData[0],tableMeta.rowData[1]);
                                 }}>
                                     <DescriptionOutlinedIcon color={(isLoading) ? 'disabled' : 'primary'} fontSize={'large'}></DescriptionOutlinedIcon>
                                 </IconButton>
 
                                 <IconButton id={tableMeta.rowData[0]} aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
-                                    DownloadFile(1, tableMeta.rowData[0]);
+                                    DownloadFile(1, tableMeta.rowData[0],tableMeta.rowData[1]);
                                 }}>
                                     <PictureAsPdfOutlinedIcon color={(isLoading) ? 'disabled' : 'secondary'} fontSize={'large'}></PictureAsPdfOutlinedIcon>
                                 </IconButton>
