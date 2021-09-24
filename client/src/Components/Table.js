@@ -159,12 +159,12 @@ export const DynamicTable = ({ data }) => {
     };
 
 
-    const DownloadFile = async (Opc, IdFact) => {
+    const DownloadFile = async (Opc, IdFact, IdCia) => {
 
         try {
             setLoading(true);
 
-            const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc });
+            const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc, IdCia:IdCia});
             console.log(data);
             if (data && data.success) {
                 const file = new Blob(
@@ -195,15 +195,15 @@ export const DynamicTable = ({ data }) => {
     if (data.length > 0) {
 
         const { Detalle, ...objKeys } = data[0];
-
         columns = Object.keys(objKeys).map(function (key) {
             return {
                 id: key,
                 label: replaceAll(key, '_', ' '),
-                minWidth: 170
+                minWidth: 170,
+                
             }
         });
-
+        console.log(columns);
         rows = data;
     }
 
@@ -228,7 +228,7 @@ export const DynamicTable = ({ data }) => {
                 key: key,
                 id: key,
                 label: replaceAll(key, '_', ' '),
-                minWidth: 170
+                minWidth: 170,
             }
         });
 
@@ -243,7 +243,10 @@ export const DynamicTable = ({ data }) => {
                     {dataCol.map((column) => {
                         const value = dataRow[column.id];
                         return (
-                            <TableCell key={column.id} align={column.align}>
+                            <TableCell 
+                            key={column.id} 
+                            align={column.align} 
+                            >
                                 {column.format && typeof value === 'number' ? column.format(value) : value}
                             </TableCell>
                         );
@@ -251,13 +254,13 @@ export const DynamicTable = ({ data }) => {
                     <TableCell key={'iconFile' + dataRow.Número_de_factura}>
 
                         <IconButton id={dataRow.Número_de_factura} aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
-                            DownloadFile(0, dataRow.Número_de_factura);
+                            DownloadFile(0, dataRow.Número_de_factura, dataRow.IdCia);
                         }}>
                             <DescriptionOutlinedIcon color={(isLoading) ? 'disabled' : 'primary'} fontSize={'large'}></DescriptionOutlinedIcon>
                         </IconButton>
 
                         <IconButton id={dataRow.Número_de_factura} aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
-                            DownloadFile(1, dataRow.Número_de_factura);
+                            DownloadFile(1, dataRow.Número_de_factura, dataRow.IdCia);
                         }}>
                             <PictureAsPdfOutlinedIcon color={(isLoading) ? 'disabled' : 'secondary'} fontSize={'large'}></PictureAsPdfOutlinedIcon>
                         </IconButton>
@@ -323,7 +326,7 @@ export const DynamicTable = ({ data }) => {
                                 <TableCell
                                     key={column.id}
                                     align={column.align}
-                                    style={{ minWidth: column.minWidth }}
+                                    style={{ minWidth: column.minWidth}}
                                 >
                                     {column.label}
                                 </TableCell>

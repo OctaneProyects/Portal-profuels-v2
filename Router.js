@@ -1,7 +1,7 @@
 const { response } = require("express");
 var Request = require("request");
-//var url = 'http://localhost:8000/api'
-var url = 'https://portal.grupoeco.com.mx/sirexa/api/'
+var url = 'http://localhost:8000/api'
+//var url = 'https://portal.grupoeco.com.mx/sirexa/api/'
 
 class Router {
 
@@ -641,7 +641,7 @@ class Router {
             try {
 
                 const u = req.session.User;
-
+                console.log(req.body.IdCia)
                 Request.get({
                     "headers": { "content-type": "application/json" },
                     "url": `${url}/DownloadFile?Opc=${req.body.Opc}&IdFact=${req.body.IdFact}&Llave=${u.Llave}&IdCia=${req.body.IdCia}`,
