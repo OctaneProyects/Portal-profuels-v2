@@ -11,6 +11,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import SearchIcon from "@material-ui/icons/Search";
 import Button from "@material-ui/core/Button";
 import JsonToSelect from "../../Components/JsonToSelect";
+
 import axios from "axios";
 
 //select
@@ -39,7 +40,7 @@ export const VentasPerifericosPorProductoyOficial = () => {
     var selEst = document.getElementById('selEstacion').value
     if (selEst != '') {
       try {
-        const { data } = await axios.post('/VentasOficialProductoOficial', {
+        const { data } = await axios.post('/PerifericosProductoYOficialPDF', {
           opc: 3,
           FechaInicial: fechaIni,
           FechaFinal: fechaFin,
@@ -48,18 +49,19 @@ export const VentasPerifericosPorProductoyOficial = () => {
           LineaPerifericoId: 0,
           TipoInforme: "A",
         });
-
+        console.log(data)
         var jsonRes = JSON.parse(data.File);
         const file = new Blob(
-          [_base64ToArrayBuffer(jsonRes)],
+          [_base64ToArrayBuffer(jsonRes.File)],
           { type: 'application/pdf' });
         let url = window.URL.createObjectURL(file);
         let a = document.createElement('a');
         a.href = url;
-        a.download = `Reporte`;
+        a.download = `Reporte ${jsonRes.Name}`;
         a.click();
       } catch (e) {
-        console.log(e);
+
+        console.log('Callo en el catch' + e);
       }
     } else {
       alert('Seleccione una estación');
@@ -77,7 +79,8 @@ export const VentasPerifericosPorProductoyOficial = () => {
       setLoading(true);
       try {
         const { data } = await axios.post(
-          "/PerifericosProductoYOficialPDF",
+          //"/PerifericosProductoYOficialPDF",
+          "/GetVentasPerifericosProductoOficial",
           {
             opc: 2,
             FechaInicial: fechaIni,
@@ -92,6 +95,7 @@ export const VentasPerifericosPorProductoyOficial = () => {
           setReportedata(data.data);
           setLoading(false);
         } else {
+          setLoading(false);
           setReportedata([]);
         }
       } catch (e) {
