@@ -52,7 +52,7 @@ export const Profuels = () => {
         }
 
     }
- 
+
     const saldoTot = data.reduce((acc, val) => acc + val.MontoASum, 0);
     const dataInvoices = data.map(({ MontoASum, ...keepAttrs }) => keepAttrs);
 
@@ -74,7 +74,14 @@ export const Profuels = () => {
                 />
                 <div className='flex-container'>
                     <div className='flex-item' style={{ textAlign: 'center' }}>
-                        <p>Estatus de cuenta: <span className='boldText' style={{ color: '#e3026f' }}> no corriente</span></p>
+                        <p>Estatus de cuenta: {
+                            saldoTot == 0
+                                ?
+                                <span className='boldText' style={{ color: '#228B22' }}>al corriente</span>
+                                :
+                                <span className='boldText' style={{ color: '#e3026f' }}>no corriente</span>
+                        }
+                        </p>
                         <p className='title-high'>{formatter.format(saldoTot.toFixed(2))}</p>
                         <Link to='/profuels/estadodecuenta'>
                             <p className='primary-text hover-link'>Ver estado de cuenta</p>
@@ -116,7 +123,7 @@ export const Profuels = () => {
                         <DynamicTable data={dataInvoices} />
                         :
                         <div style={{ padding: '2%', backgroundColor: 'white', borderRadius: '5px', height: '60%' }}>
-                            {variants.map((variant,i) => (
+                            {variants.map((variant, i) => (
                                 <Typography component="div" key={`${variant}-${i}`} variant={variant}>
                                     <Skeleton />
                                 </Typography>
