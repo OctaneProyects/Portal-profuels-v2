@@ -36,6 +36,13 @@ export const Reportes = () => {
                         </Button>
                     </Link>
                 </div> 
+                <div className='flex-item-cards-btn'>
+                    <Link to='/reportes/VentasPerifericosPorProductoyOficial'>
+                        <Button variant="contained" color="primary" fullWidth={true}>
+                            Cambios
+                        </Button>
+                    </Link>
+                </div> 
             </div>
             <a id='hoverUp' href='/#'><FontAwesomeIcon icon={faChevronUp} /></a>
         </main>
