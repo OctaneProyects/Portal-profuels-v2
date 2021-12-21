@@ -52,7 +52,17 @@ export const Profuels = () => {
         }
 
     }
+    console.log(`data`, data)
+    let corriente = 0;
+    data.map((inv) => {
+        let fecha = inv.Fecha_de_vencimiento;
 
+        fecha = new Date(fecha.split('-')[0], parseInt(fecha.split('-')[1]) - 1, fecha.split('-')[2])
+
+        if (fecha < new Date()) {
+            corriente = corriente + 1;
+        }
+    })
     const saldoTot = data.reduce((acc, val) => acc + val.MontoASum, 0);
     const dataInvoices = data.map(({ MontoASum, ...keepAttrs }) => keepAttrs);
 
@@ -75,7 +85,7 @@ export const Profuels = () => {
                 <div className='flex-container'>
                     <div className='flex-item' style={{ textAlign: 'center' }}>
                         <p>Estatus de cuenta: {
-                            saldoTot == 0
+                            corriente == 0 || saldoTot == 0
                                 ?
                                 <span className='boldText' style={{ color: '#228B22' }}>al corriente</span>
                                 :
