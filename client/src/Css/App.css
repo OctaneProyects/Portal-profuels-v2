@@ -87,6 +87,7 @@ button:disabled {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  padding-top: 1rem;
 }
 
 .flex-item {

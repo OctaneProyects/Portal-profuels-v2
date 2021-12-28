@@ -6,46 +6,48 @@ import { NavBar, HorizonNavBar } from '../../Components/NavBar.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
+
 export const Reportes = () => {
     return (
         <>
-        <NavBar
-            text={UsrModel.userName.toUpperCase()}
-        />
-        <HorizonNavBar />
-        <main>
-            <div className='flex-container'>
-                <div className='flex-item-cards-btn'>
-                    <Link to='/reportes/controlvolumetrico'>
-                        <Button variant="contained" color="primary" fullWidth={true}>
-                            Control Volumétrico
-                        </Button>
-                    </Link>
+            <NavBar
+                text={UsrModel.userName.toUpperCase()}
+            />
+            <HorizonNavBar />
+            <main>
+                <div className='flex-container'>
+                    <div className='flex-item-cards-btn'>
+                        <Link to='/reportes/controlvolumetrico'>
+                            <Button variant="contained" color="primary" fullWidth={true}>
+                                Control Volumétrico
+                            </Button>
+                        </Link>
+                    </div>
+                    <div className='flex-item-cards-btn'>
+                        <Link to='/reportes/facturasemitidas'>
+                            <Button variant="contained" color="primary" fullWidth={true}>
+                                Facturas emitidas
+                            </Button>
+                        </Link>
+                    </div>
+                    <div className='flex-item-cards-btn'>
+                        <Link to='/reportes/VentasPerifericosPorProductoyOficial'>
+                            <Button variant="contained" color="primary" fullWidth={true}>
+                                Ventas Perifericos por Producto y Oficial
+                            </Button>
+                        </Link>
+                    </div>
+                    <div className='flex-item-cards-btn'>
+                        <Link to='/reportes/HistorialDePrecios'>
+                            <Button variant="contained" color="primary" fullWidth={true}>
+                                Historial de precios
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
-                <div className='flex-item-cards-btn'>
-                    <Link to='/reportes/facturasemitidas'>
-                        <Button variant="contained" color="primary" fullWidth={true}>
-                            Facturas emitidas
-                        </Button>
-                    </Link>
-                </div>
-                 <div className='flex-item-cards-btn'>
-                    <Link to='/reportes/VentasPerifericosPorProductoyOficial'>
-                        <Button variant="contained" color="primary" fullWidth={true}>
-                            Ventas Perifericos por Producto y Oficial
-                        </Button>
-                    </Link>
-                </div> 
-                <div className='flex-item-cards-btn'>
-                    <Link to='/reportes/VentasPerifericosPorProductoyOficial'>
-                        <Button variant="contained" color="primary" fullWidth={true}>
-                            Cambios
-                        </Button>
-                    </Link>
-                </div> 
-            </div>
-            <a id='hoverUp' href='/#'><FontAwesomeIcon icon={faChevronUp} /></a>
-        </main>
-    </>
+
+                <a id='hoverUp' href='/#'><FontAwesomeIcon icon={faChevronUp} /></a>
+            </main>
+        </>
     )
 }
