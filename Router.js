@@ -1,7 +1,7 @@
 const { response } = require("express");
 var Request = require("request");
-//var url = 'http://localhost:8000/api'
-var url = 'https://portal.grupoeco.com.mx/sirexa/api/'
+var url = 'http://localhost:8000/api'
+// var url = 'https://portal.grupoeco.com.mx/sirexa/api/'
 
 class Router {
 
@@ -19,6 +19,7 @@ class Router {
         this.GetEstaciones(App);
         this.GetInformes(App);
         this.GetPrecios(App);
+        this.GetHistPrecios(App);
         this.GetLinksByUserLlave(App);
         this.ValidaLink(App);
         this.DownloadInvoiceFile(App);
@@ -815,6 +816,69 @@ class Router {
                 Request.get({
                     "headers": { "content-type": "application/json" },
                     "url": `${url}/GetPrecios`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
+    GetHistPrecios(App) {
+
+        App.post('/GetHistPrecios/:t', (req, res) => {
+
+            try {
+
+                const l = req.session.User.Llave; // "Llave": "B1085BB4-694F-4E12-B217-499DB26D8C34" (para pruebas),
+                const t = req.params.t; // "Tipo": req.params.t (para pruebas)
+
+                const u = {
+                    "Llave": l,
+                    "Tipo": t,
+                    "fechaInicial":req.body.fechaInicial,
+                    "fechaFinal":req.body.fechaFinal
+                }
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetHistPrecios/`,
                     body: JSON.stringify(u),
                 }, (error, response, body) => {
 
