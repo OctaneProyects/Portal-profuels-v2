@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
 
+
 export const Reportes = () => {
     return (
         <>
@@ -29,7 +30,7 @@ export const Reportes = () => {
                                 Facturas emitidas
                             </Button>
                         </Link>
-                    </div>
+                    </div>                    
                     <div className='flex-item-cards-btn'>
                         <Link to='/reportes/VentasPerifericosPorProductoyOficial'>
                             <Button variant="contained" color="primary" fullWidth={true}>
