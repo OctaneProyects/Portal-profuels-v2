@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, IconButton } from '@material-ui/core/';
+import { makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, IconButton, Button } from '@material-ui/core/';
+
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Typography from '@material-ui/core/Typography';
@@ -8,8 +9,11 @@ import Collapse from '@material-ui/core/Collapse';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import PictureAsPdfOutlinedIcon from '@material-ui/icons/PictureAsPdfOutlined';
 import MUIDataTable from "mui-datatables";
+import exportFromJSON from 'export-from-json'
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCoffee, faFileExcel, faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 
 export const NormalTable = ({ data, docsCol, title, pdf, onclick }) => {
@@ -32,7 +36,7 @@ export const NormalTable = ({ data, docsCol, title, pdf, onclick }) => {
 
         try {
             setLoading(true);
-            const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc, IdCia:IdCia});
+            const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc, IdCia: IdCia });
             console.log(data);
 
             if (data && data.success) {
@@ -68,9 +72,9 @@ export const NormalTable = ({ data, docsCol, title, pdf, onclick }) => {
             return {
                 name: key,
                 label: replaceAll(key, '_', ' '),
-                options: (key == "IdCia"? {
+                options: (key == "IdCia" ? {
                     display: false,
-                }:null),
+                } : null),
             }
         });
 
@@ -84,13 +88,13 @@ export const NormalTable = ({ data, docsCol, title, pdf, onclick }) => {
                         customBodyRender: (value, tableMeta, updateValue) => (
                             <>
                                 <IconButton id={tableMeta.rowData[0]} aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
-                                    DownloadFile(0, tableMeta.rowData[0],tableMeta.rowData[1]);
+                                    DownloadFile(0, tableMeta.rowData[0], tableMeta.rowData[1]);
                                 }}>
                                     <DescriptionOutlinedIcon color={(isLoading) ? 'disabled' : 'primary'} fontSize={'large'}></DescriptionOutlinedIcon>
                                 </IconButton>
 
                                 <IconButton id={tableMeta.rowData[0]} aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
-                                    DownloadFile(1, tableMeta.rowData[0],tableMeta.rowData[1]);
+                                    DownloadFile(1, tableMeta.rowData[0], tableMeta.rowData[1]);
                                 }}>
                                     <PictureAsPdfOutlinedIcon color={(isLoading) ? 'disabled' : 'secondary'} fontSize={'large'}></PictureAsPdfOutlinedIcon>
                                 </IconButton>
@@ -111,12 +115,12 @@ export const NormalTable = ({ data, docsCol, title, pdf, onclick }) => {
                 columns={columns.length ? columns : noCols}
                 options={{
                     selectableRows: 'none',
-                    downloadOptions: {
+                    /*downloadOptions: {
                         filterOptions: {
                             useDisplayedColumnsOnly: true,
                             useDisplayedRowsOnly: true,
                         }
-                    },
+                    },*/
                     customToolbar: () => {
                         if (pdf) {
                             return (
@@ -164,7 +168,7 @@ export const DynamicTable = ({ data }) => {
         try {
             setLoading(true);
 
-            const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc, IdCia:IdCia});
+            const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc, IdCia: IdCia });
             console.log(data);
             if (data && data.success) {
                 const file = new Blob(
@@ -200,7 +204,7 @@ export const DynamicTable = ({ data }) => {
                 id: key,
                 label: replaceAll(key, '_', ' '),
                 minWidth: 170,
-                
+
             }
         });
         console.log(columns);
@@ -243,9 +247,9 @@ export const DynamicTable = ({ data }) => {
                     {dataCol.map((column) => {
                         const value = dataRow[column.id];
                         return (
-                            <TableCell 
-                            key={column.id} 
-                            align={column.align} 
+                            <TableCell
+                                key={column.id}
+                                align={column.align}
                             >
                                 {column.format && typeof value === 'number' ? column.format(value) : value}
                             </TableCell>
@@ -317,8 +321,34 @@ export const DynamicTable = ({ data }) => {
 
     return (
         <Paper className={classes.root}>
-            <TableContainer className={classes.container}>
-                <Table stickyHeader aria-label='sticky table'>
+            <div style={{ textAlign: 'right', paddingRight: '20%', paddingTop: '2%', paddingBottom: '3%' }}>
+
+                <IconButton
+                    variant="outlined"
+                    color="gray"
+
+                    onClick={() => {
+                        //const data = [{ foo: 'foo'}, { bar: 'bar' }]
+                        const fileName = 'download'
+                        const exportType = exportFromJSON.types.csv
+
+                        exportFromJSON({ data, fileName, exportType })
+                    }}>
+                    <FontAwesomeIcon icon={faCloudDownloadAlt} color="gray" />
+                </IconButton>
+                <button className='btn' onClick={() => {
+                    //const data = [{ foo: 'foo'}, { bar: 'bar' }]
+                    const fileName = 'download'
+                    const exportType = exportFromJSON.types.csv
+
+                    exportFromJSON({ data, fileName, exportType })
+                }}
+                    style={{ borderRadius: 8, borderColor: 'transparent' }}>
+
+                </button>
+            </div>
+            <TableContainer className={classes.container} >
+                <Table stickyHeader aria-label='sticky table' exportButton={true}>
                     <TableHead>
                         <TableRow>
                             <TableCell />
@@ -326,7 +356,7 @@ export const DynamicTable = ({ data }) => {
                                 <TableCell
                                     key={column.id}
                                     align={column.align}
-                                    style={{ minWidth: column.minWidth}}
+                                    style={{ minWidth: column.minWidth }}
                                 >
                                     {column.label}
                                 </TableCell>
